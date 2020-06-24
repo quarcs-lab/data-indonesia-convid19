@@ -1,0 +1,76 @@
+---
+title: "Creating shape file cumulative monthly covid case Indonesia"
+output: html_notebook
+---
+
+
+#libraries
+```{r}
+library(tidyverse)  # Modern data science workflow
+library(sf)         # Simple features for R
+library(tmap)       # Thematic Maps
+```
+
+#import non spatial data
+```{r}
+library(readr)
+covid <- read_delim("D:/Mygithub/data-indonesia-covid19/monthlycases.csv", 
+    ";", escape_double = FALSE, trim_ws = TRUE)
+View(covid)
+```
+
+#import shape file
+```{r}
+map <- read_sf("province border.shp")
+```
+
+```{r}
+glimpse(map)
+```
+
+
+# Merge non spatial and spatial data
+```{r}
+covid_map <- inner_join(
+  covid,
+  map,
+  by = "ID"
+)
+```
+
+
+## Keep data as sf object
+
+- Keep the data as sf class, so we will not lose the coodinate system
+
+```{r}
+covid_map <- st_as_sf(covid_map)
+```
+
+```{r}
+glimpse(covid_map)
+```
+
+
+# Plot Thematic Maps
+## Quick Map 
+
+- A quick map of the rate in month 3
+
+```{r}
+qtm(covid_map, fill = "ratemo3")
+```
+
+
+- A quick map of the case in month 3
+
+```{r}
+qtm(covid_map, fill = "casemo3")
+```
+
+
+#save the shape file
+```{r}
+st_write(covid_map, "covid_map_monthlyrate.shp")
+```
+
