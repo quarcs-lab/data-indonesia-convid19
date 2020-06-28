@@ -14,7 +14,7 @@ library(tmap)       # Thematic Maps
 #import non spatial data
 ```{r}
 library(readr)
-covid <- read_delim("D:/Mygithub/data-indonesia-covid19/dailycasesrate.csv", 
+covid <- read_delim("D:/Mygithub/data-indonesia-covid19/dailycases.csv", 
     ";", escape_double = FALSE, trim_ws = TRUE)
 View(covid)
 ```
@@ -88,6 +88,6 @@ qtm(covid_map, fill = "pop1000")
 
 #save the shape file
 ```{r}
-st_write(covid_map, "covid_map_dailyrate.shp")
+st_write(covid_map, "covid_map_dailycase.shp")
 ```
 
