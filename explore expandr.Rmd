@@ -1,0 +1,51 @@
+---
+title: "Covid-19 Indonesia: Exploratory Analysis at Province Level"
+output: html_notebook
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+library(tidyverse)
+library(ExPanDaR)      # explore panel data interactively   
+library(gapminder)     # panel data for GDP and Health 
+
+# Change the presentation of decimal numbers to 4 and avoid scientific notation
+options(prompt="R> ", digits=3, scipen=999)
+```
+
+```{r}
+library(readxl)
+data <- read_excel("D:/Mygithub/data-indonesia-covid19/processed data/explore expandr.xlsx", 
+    sheet = "Sheet1")
+View(data)
+```
+
+```{r}
+df <- data[,colSums(is.na(data))<nrow(data)]
+```
+
+```{r}
+df1 <- df %>% select(-c(3:6,8:11))
+```
+
+
+```{r}
+#df_definitions <- read_csv("df_def.csv") 
+#df_definitions
+```
+
+
+```{r eval=FALSE, include=T}
+# Run it in the console
+ExPanD(
+  df1,
+  #df_def = df_definitions,
+  export_nb_option = TRUE,
+  title = "Cross-sectional exploration",
+  abstract = paste("Covid-19 Indonesian provinces exploration")
+  )
+```
