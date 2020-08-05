@@ -1,0 +1,179 @@
+---
+title: 'Covid-19 outbreak and its economic impacts: An interactive exploration on Indonesian provincial data'
+author: "Harry Aginta, Ragdad Chani, Carlos Mendez"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '4'
+  github_document: default
+  html_notebook:
+    code_folding: show
+    df_print: kable
+    highlight: monochrome
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+---
+
+<style>
+h1.title {font-size: 18pt; color: DarkBlue;} 
+body, h1, h2, h3, h4 {font-family: "Palatino", serif;}
+body {font-size: 12pt;}
+/* Headers */
+h1,h2,h3,h4,h5,h6{font-size: 14pt; color: #00008B;}
+body {color: #333333;}
+a, a:hover {color: #8B3A62;}
+pre {font-size: 12px;}
+</style>
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+library(tidyverse)
+library(ExPanDaR)   
+library(sf)         # Simple features for R
+library(tmap)       # Thematic Maps
+library(ggplot2)
+library(tmaptools)
+library(leaflet)
+
+options(prompt="R> ", digits=3, scipen=999)
+```
+
+Suggested Citation: 
+
+> Harry, A. Chani, R, Mendez, C (2020). _Covid-19 outbreak and its economic impacts: An interactive exploration on Indonesian provincial data._ Available at ......
+
+This work is licensed under the Creative Commons Attribution-Share Alike 4.0 International License. 
+![](CCLicense.png){width=100px}
+
+# Load non-spatial data
+
+```{r}
+library(readxl)
+data <- read_excel("explore expandr.xlsx", 
+    sheet = "Sheet1")
+View(data)
+```
+
+```{r}
+df <- data %>% select(-c(4:7,9:12))
+```
+
+# Load dataframe of definitions
+```{r}
+library(readr)
+df_definitions <- read_delim("df_def.csv", ";", escape_double = FALSE, 
+    trim_ws = TRUE)
+df_definitions
+```
+
+# Load shape file of Indonesian provinces
+```{r}
+map <- read_sf("province border.shp")
+```
+
+# Merge non-spatial data with spatial data
+```{r}
+covid_map <- inner_join(
+  df,
+  map,
+  by = "ID"
+)
+```
+
+```{r}
+covid_map
+```
+
+# Store data as sf object
+```{r}
+covid_map1 <- st_as_sf(covid_map)
+```
+
+# How is the change in Covid-19 cases from March to June 2020?
+```{r}
+qtm(covid_map1, fill = "case_chg")
+qtm(covid_map1, fill = "rate_chg")
+```
+
+## Interactive map
+
+```{r}
+tmap_mode("view")
+tm_shape(covid_map1) +
+  tm_polygons(c("case_chg", "rate_chg"), id = "province", palette=list("Oranges", "Blues"), title=c("Change in absolute number of case", "Change in rate per 100.000 population)")) +
+tm_fill(style="kmeans")
+```
+
+#  How much is growth impact in Q2-2020 (yoy and qtq)?
+```{r}
+tmap_mode("view")
+tm_shape(covid_map1) +
+  tm_polygons(c("gdp_q2_yoy", "gdp_q2_qtq"), id = "province", palette=list("Reds", "Greens"), title=c("GDP growth Q2-2020 (yoy)", "GDP growth Q2-2020 (qtq)")) +
+tm_fill(style="kmeans")
+```
+Most of provinces record negative growth in Q2-2020. However, some provinces ara able to maintain positive growth. They are West Papua and Papua (for yoy growth) and West Nusa Tenggara, East Nusa Tenggara, Papua, Central Sulawesi (for qtq growth).
+
+#  How economic structure is related to growth impact in Q2-2020?
+```{r}
+tmap_mode("view")
+tm_shape(covid_map1) +
+  tm_polygons(c("gdp_q2_yoy", "THS_share_gdp"), id = "province", palette=list("Reds", "Greens"), title=c("GDP growth Q2-2020 (yoy)", "THS share to GDP (%)")) +
+tm_fill(style="kmeans")
+```
+Provinces with higher share of Transportation & logistics, Hotels & Restaurants, Services in GDP suffer larger negative impact.
+
+
+# Interactive exploration
+
+```{r}
+# Run it in the console
+ExPanD(
+  df,
+ #df_def = df_definitions,
+  export_nb_option = TRUE,
+ title = "Covid-19 outbreak and its economic impacts: An interactive exploration on Indonesian provincial data",
+  abstract = paste("The coronavirus (COVID-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the virus has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? This web application provides handy interactive exploration on the economic impacts of Covid-19 across Indonesian provinces.)
+</br>
+</br>
+Suggested citation: Harry, A. Chani, R. Mendez, C. (2020). Covid-19 outbreak and its economic impacts: An interactive exploration on Indonesian provincial data")
+  )
+```
+
+```{r}
+config_list_fromRDS <- readRDS("ExPanD_gapminder2007.RDS")
+```
+
+```{r eval=FALSE, include=T}
+# Run it in the console
+ExPanD(
+  df,
+  df_def = df_definitions,
+  export_nb_option = TRUE,
+  config_list = config_list_fromRDS,
+  title = "Covid-19 outbreak and its economic impacts: An interactive exploration on Indonesian provincial data",
+  abstract = paste("The coronavirus (COVID-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the virus has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? This web application provides handy interactive exploration on the economic impacts of Covid-19 across Indonesian provinces.)
+</br>
+</br>
+Suggested citation: Harry, A. Chani, R. Mendez, C. (2020). Covid-19 outbreak and its economic impacts: An interactive exploration on Indonesian provincial data")
+  )
+```
+
+
+
+
+> <https://>
+
+# References
+
+- <https://joachim-gassen.github.io/ExPanDaR/>
+- <https://cran.r-project.org/web/packages/ExPanDaR/index.html>
