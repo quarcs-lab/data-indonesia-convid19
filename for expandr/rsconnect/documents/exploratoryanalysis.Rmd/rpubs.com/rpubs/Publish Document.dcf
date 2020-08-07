@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/646568/f704710624864c64942c9ef9d67381f2
+bundleId: https://api.rpubs.com/api/v1/document/646568/f704710624864c64942c9ef9d67381f2
+url: http://rpubs.com/haginta/646568
+when: 1596702394.78546

@@ -1,0 +1,19 @@
+var_name;var_def;type
+Prov;Short name of province;cs_id
+region;Name of island / region;factor
+case_chg;Change in number of cases from Mar to Jun 2020 (cumulative) ;numeric
+rate_chg;Change in rate of cases from Mar to Jun 2020 (Rate = number of cases in 100.000 population, cumulative);numeric
+pop;Number of population (in 100.000);numeric
+job_loss;Job losses (Number of workers who loss their jobs);numeric
+unemp;Unemployment rate (%, Feb 2020);numeric
+mob_retail;Mobility changes (change compared to baseline days) - Retail and recreation;numeric
+mob_groc;Mobility changes (change compared to baseline days) - Grocery & pharmacy;numeric
+mob_parks;Mobility changes (change compared to baseline days) - Parks;numeric
+mob_trans;Mobility changes (change compared to baseline days) - Transit stations;numeric
+mob_work;Mobility changes (change compared to baseline days) - Workplaces;numeric
+mob_all;Mobility changes (change compared to baseline days) - Average;numeric
+THS_share_gdp;Share of Transportation & logistics, Hotels & Restaurants, Services to GDP (%, in 2019);numeric
+gdp_q1_yoy;Real GDP growth in Q1-2020 (%, yoy);numeric
+gdp_q2_yoy;Real GDP growth in Q2-2020 (%, yoy);numeric
+gdp_q2_qtq;Real GDP growth in Q2-2020 (%, qtq);numeric
+province;Name of the province;factor
