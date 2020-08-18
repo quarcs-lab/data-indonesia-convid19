@@ -4,7 +4,7 @@ username:
 account: rpubs
 server: rpubs.com
 hostUrl: rpubs.com
-appId: https://api.rpubs.com/api/v1/document/646568/f704710624864c64942c9ef9d67381f2
-bundleId: https://api.rpubs.com/api/v1/document/646568/f704710624864c64942c9ef9d67381f2
-url: http://rpubs.com/haginta/646568
-when: 1596702394.78546
+appId: https://api.rpubs.com/api/v1/document/650044/08c8bc2b52ac43a3a75b89b1c5f5f894
+bundleId: https://api.rpubs.com/api/v1/document/650044/08c8bc2b52ac43a3a75b89b1c5f5f894
+url: http://rpubs.com/publish/claim/650044/f942d6d02321473d9563ccb027da33b3
+when: 1597728287.59445

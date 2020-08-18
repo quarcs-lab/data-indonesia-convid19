@@ -12,7 +12,7 @@ output:
     toc_float:
       collapsed: no
       smooth_scroll: no
- html_document:
+  html_document:
     code_download: true
     df_print: paged
     toc: true
@@ -26,17 +26,8 @@ output:
     highlight: "monochrome"
   pdf_document: default
   word_document: default
-bibliography: biblio.bib
 ---
 
-The coronavirus (Covid-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the pandemic has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? This publication is intended to explore the economic impacts of Covid-19 pandemic across Indonesian provinces from Q1 to Q2-2020. Apart from Covid-19 cases and economic growth data, we also include jobs and community mobility data from Google to capture the impact of Covid-19 outbreaks on regional employment and people mobility.
-
-Suggested Citation: 
-
-> Harry, A. Cani, R.M, Mendez, C (2020). _Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data._ Available at https://rpubs.com/haginta/covid19-econ-impacts-indonesia.
-
-This work is licensed under the Creative Commons Attribution-Share Alike 4.0 International License. 
-![](CCLicense.png){width=75px}
 
 <style>
 h1.title {font-size: 18pt; color: DarkBlue;} 
@@ -49,6 +40,14 @@ a, a:hover {color: #8B3A62;}
 pre {font-size: 12px;}
 </style>
 
+The coronavirus (Covid-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the pandemic has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? This publication is intended to explore the economic impacts of Covid-19 pandemic across Indonesian provinces from Q1 to Q2-2020. Apart from Covid-19 cases and economic growth data, we also include jobs and community mobility data from Google to capture the impact of Covid-19 outbreaks on regional employment and people mobility.
+
+Suggested Citation: 
+
+> Harry, A. Cani, R.M, Mendez, C (2020). _Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data._ Available at https://rpubs.com/haginta/covid19-econ-impacts-indonesia.
+
+This work is licensed under the Creative Commons Attribution-Share Alike 4.0 International License. 
+![](CCLicense.png){width=75px}
 
 ```{r message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
@@ -61,7 +60,7 @@ library(RColorBrewer) # ColorBrewer Palettes
 library(leaflet)    # Interactive web maps
 library(rgdal)      # Bindings for the Geospatial Data Abstraction Library
 library(rgeos)      # Interface to Geometry Engine - Open Source 
-library(ExPanDaR)
+
 
 # Change the presentation of decimal numbers to 4 and avoid scientific notation
 options(prompt="R> ", digits=4, scipen=999)
@@ -113,8 +112,9 @@ covid_map1 <- st_as_sf(covid_map)
 ```
 
 # How the number of cumulative cases changes from March to June 2020?
+
+
 ```{r}
-tmap_mode("plot")
 tm_shape(covid_map1) +
   tm_polygons(c("case_chg", "rate_chg"), id = "province", palette=list("Reds", "Greens"), title=c("Change in number of cumulative cases (Mar to Jun)", "Change in rate of cumulative cases (Mar to Jun)")) +
 tm_fill(style="kmeans") +
@@ -125,7 +125,6 @@ tm_layout(legend.title.size = 0.6,
 
 #  How jobs and people mobility are affected?
 ```{r}
-tmap_mode("plot")
 tm_shape(covid_map1) +
   tm_polygons(c("job_loss", "mob_work"), id = "province", palette=list("Blues", "Reds"), title=c("Number of jobs affected", "Mobility to work compared to baseline")) +
 tm_fill(style="kmeans") +
@@ -136,7 +135,6 @@ tm_fill(style="kmeans") +
 
 #  How much is growth impact in Q2-2020 (yoy and qtq)?
 ```{r}
-tmap_mode("plot")
 tm_shape(covid_map1) +
   tm_polygons(c("gdp_q2_yoy", "gdp_q2_qtq"), id = "province", palette=list("Reds", "Blues"), title=c("GDP growth Q2-2020 (yoy)", "GDP growth Q2-2020 (qtq)")) +
 tm_fill(style="kmeans") +
@@ -150,7 +148,6 @@ Most of provinces recorded negative growth rate in Q2-2020. However, some provin
 
 #  How economic structure is related to growth impact in Q2-2020?
 ```{r}
-tmap_mode("plot")
 tm_shape(covid_map1) +
   tm_polygons(c("gdp_q2_yoy", "THS_share_gdp"), id = "province", palette=list("Reds", "Blues"), title=c("GDP growth Q2-2020 (yoy)", "THS share to GDP (%)")) +
 tm_fill(style="kmeans")+
@@ -176,6 +173,10 @@ tm_shape(covid_map1) +
    tm_borders(alpha=.4) +
     tm_legend(outside=TRUE) +
   tm_layout(frame = FALSE) 
+```
+
+```{r}
+tmap_mode("plot")
 ```
 
 # Interactive exploration
