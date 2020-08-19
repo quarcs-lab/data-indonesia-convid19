@@ -1,0 +1,216 @@
+---
+title: "Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data"
+author: "Harry Aginta, Ragdad Cani Miranti, Carlos Mendez"
+output:
+  html_notebook:
+    code_folding: show
+    highlight: monochrome
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+  html_document:
+    code_download: true
+    df_print: paged
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 4
+    number_sections: true
+    code_folding: "show"
+    theme: "cosmo"
+    highlight: "monochrome"
+  pdf_document: default
+  word_document: default
+---
+
+
+<style>
+h1.title {font-size: 18pt; color: DarkBlue;} 
+body, h1, h2, h3, h4 {font-family: "Palatino", serif;}
+body {font-size: 12pt;}
+/* Headers */
+h1,h2,h3,h4,h5,h6{font-size: 14pt; color: #00008B;}
+body {color: #333333;}
+a, a:hover {color: #8B3A62;}
+pre {font-size: 12px;}
+</style>
+
+The coronavirus (Covid-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the pandemic has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? This publication is intended to explore the economic impacts of Covid-19 pandemic across Indonesian provinces from Q1 to Q2-2020. Apart from Covid-19 cases and economic growth data, we also include jobs and community mobility data from Google to capture the impact of Covid-19 outbreaks on regional employment and people mobility.
+
+Suggested Citation: 
+
+> Harry, A. Cani, R.M, Mendez, C (2020). _Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data._ Available at https://rpubs.com/haginta/covid19-econ-impacts-indonesia.
+
+This work is licensed under the Creative Commons Attribution-Share Alike 4.0 International License. 
+![](CCLicense.png){width=75px}
+
+```{r message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+
+library(tidyverse)  # Modern data science workflow
+library(sf)         # Simple features for R
+library(tmap)       # Thematic Maps
+library(tmaptools)  # Thematic Maps Tools
+library(RColorBrewer) # ColorBrewer Palettes
+library(leaflet)    # Interactive web maps
+library(rgdal)      # Bindings for the Geospatial Data Abstraction Library
+library(rgeos)      # Interface to Geometry Engine - Open Source 
+
+
+# Change the presentation of decimal numbers to 4 and avoid scientific notation
+options(prompt="R> ", digits=4, scipen=999)
+```
+
+
+# Load non-spatial data
+
+```{r}
+library(readxl)
+data <- read_excel("explore expandr.xlsx", 
+    sheet = "Sheet1")
+View(data)
+```
+
+```{r}
+df <- data %>% select(-c(4:7,9:12))
+```
+
+# Load dataframe of definitions
+```{r}
+library(readr)
+df_definitions <- read_delim("df_def.csv", ";", escape_double = FALSE, 
+    trim_ws = TRUE)
+df_definitions
+```
+
+# Load shape file of Indonesian provinces
+```{r}
+map <- read_sf("province border.shp")
+```
+
+# Merge non-spatial data with spatial data
+```{r}
+covid_map <- inner_join(
+  df,
+  map,
+  by = "ID"
+)
+```
+
+```{r}
+covid_map
+```
+
+# Store data as sf object
+```{r}
+covid_map1 <- st_as_sf(covid_map)
+```
+
+```{r}
+case_rate <- ggplot(data, aes(reorder(province, -rate_chg, sum), rate_chg)) +
+  geom_col() + coord_flip() +
+  theme_minimal() +
+labs(subtitle = "",
+x = "Province",
+y = "Change in number of cases (in 100.000 population)", color="grey") +
+theme(text=element_text( family="Palatino")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  guides(col = guide_legend(nrow = 8))
+case_rate
+ggsave("case_change.png", width = 9, height = 5)
+```
+
+```{r}
+a <- data %>% mutate(gdp_col = ifelse(gdp_q2_yoy < 0, "red", "green")) 
+  ggplot(a, aes(reorder(province, -gdp_q2_yoy, sum), gdp_q2_yoy, fill = gdp_col)) +
+  geom_col() + coord_flip() +   scale_fill_identity(guide = FALSE) +
+  theme_minimal() +
+labs(subtitle = "",
+x = "Province",
+y = "GDP growth in Q2-2020 (%, yoy)", color="grey") +
+theme(text=element_text( family="Palatino")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  guides(col = guide_legend(nrow = 8))
+ggsave("gdp_q2.png", width = 9, height = 5)
+```
+
+```{r}
+mobility <- ggplot(data, aes(reorder(province, -mob_all, sum), mob_all)) +
+  geom_col() + coord_flip() +
+  theme_minimal() +
+labs(subtitle = "",
+x = "Province",
+y = "Change in people mobility relative to baseline", color="grey") +
+theme(text=element_text( family="Palatino")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  guides(col = guide_legend(nrow = 8))
+mobility
+ggsave("mobility.png", width = 9, height = 5)
+```
+
+```{r}
+job_loss <- ggplot(data, aes(reorder(province, -job_loss, sum), job_loss)) +
+  geom_col() + coord_flip() +
+  theme_minimal() +
+labs(subtitle = "",
+x = "Province",
+y = "Number of people who loss their job", color="grey") +
+theme(text=element_text( family="Palatino")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+  guides(col = guide_legend(nrow = 8))
+job_loss
+ggsave("job_loss.png", width = 9, height = 5)
+```
+
+
+#Correlation matrix
+
+```{r}
+df1 <- subset(data, select = c(2, 13, 15, 22, 23, 25))
+  colnames(df1) <- c("Province", "Case change", "Job loss", "People mobility", "TAS share in GDP", "GDPg Q2-2020")
+```
+
+
+```{r}
+# Provide correlation matrix
+corr <- cor(df1[,c(3:6)])
+round(corr, 2)
+```
+
+```{r}
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = pmat[ut]
+    )
+}
+```
+
+
+```{r}
+library(Hmisc)
+res2<-rcorr(as.matrix(df1[,c(3:6)]))
+flattenCorrMatrix(res2$r, res2$P)
+```
+
+
+```{r}
+# Visualize correlation matrix
+library(corrplot)
+corrplot(res2$r, type="upper", order="hclust", 
+         p.mat = res2$P, sig.level = 0.01, insig = "blank")
+dev.copy(jpeg,filename="corr.png");
+dev.off ();
+```

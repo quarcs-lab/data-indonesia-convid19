@@ -159,3 +159,83 @@ Provinces like Bali, Yogyakarta and Jakarta with higher share of transportation,
 
 # Interactive map
 
+```{r}
+tmap_mode("view")
+```
+
+```{r}
+tm_shape(covid_map1) + 
+  tm_fill("gdp_q2_yoy",
+          palette = "viridis",
+          id="province",
+          popup.vars=c("case_chg", "rate_chg", "job_loss", "mob_work", "gdp_q2_yoy", "gdp_q2_qtq")) + 
+   tm_borders(alpha=.4) +
+    tm_legend(outside=TRUE) +
+  tm_layout(frame = FALSE) 
+```
+
+
+# Interactive exploration
+
+```{r eval=FALSE, include=FALSE}
+df1 <- df %>% select(-c(1)) %>% 
+  mutate(Prov = province)
+```
+
+```{r eval=FALSE, include=FALSE}
+df1 <- df1 %>%
+  select(Prov, everything()) %>% 
+  select(-province,province)
+```
+
+```{r eval=FALSE, include=FALSE}
+library(readr)
+df_def1 <- read_delim("df_def1.csv", ";", escape_double = FALSE, 
+    trim_ws = TRUE)
+df_def1
+```
+
+```{r eval=FALSE, include=FALSE}
+# Run it in the console
+ExPanD(
+  df1,
+ df_def = df_def1,
+  export_nb_option = TRUE,
+ title = "Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data",
+  abstract = paste("The coronavirus (Covid-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the virus outbreaks has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? Find out more with this web application, which is intended to provide handy interactive exploration on the economic impacts of Covid-19 across Indonesian provinces.)
+</br>
+</br>
+Suggested citation: Harry, A. Cani, R.M. Mendez, C. (2020). Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data")
+  )
+```
+
+
+```{r eval=FALSE, include=FALSE}
+config_list_fromRDS <- readRDS("covid19.RDS")
+```
+
+```{r eval=FALSE, include=FALSE}
+# Run it in the console
+ExPanD(
+  df1,
+  df_def = df_def1,
+  export_nb_option = TRUE,
+  config_list = config_list_fromRDS,
+  title = "Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data",
+  abstract = paste("The coronavirus (Covid-19) outbreaks that led to a serious health crisis has brought major disruptions on the economy in many countries, including Indonesia. Firstly identified in early March 2020, the virus outbreaks has started to affect Indonesian economy in Q1-2020. Yet the situation is even worse in Q2-2020. How bad is that? Find out more with this web application, which is intended to provide handy interactive exploration on the economic impacts of Covid-19 across Indonesian provinces.)
+</br>
+</br>
+Suggested citation: Harry, A. Cani, R.M. Mendez, C. (2020). Covid-19 pandemic and its economic impacts: An interactive exploration on Indonesian provincial data")
+  )
+```
+
+For further interactive data exploration, please visit the link below: 
+
+https://haginta.shinyapps.io/Covid19_econ_impacts_reg_Indonesia/
+
+
+# References
+
+- <https://joachim-gassen.github.io/ExPanDaR/>
+- <https://cran.r-project.org/web/packages/ExPanDaR/index.html>
+
