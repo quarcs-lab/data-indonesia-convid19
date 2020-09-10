@@ -1,0 +1,214 @@
+---
+title: "HP Filter Quarterly Data"
+output: html_notebook
+---
+
+
+```{r}
+library(mFilter)
+library(dplyr)
+library(ggplot2)
+library(dygraphs)
+library(xts)
+library(readxl)
+library(quantmod)
+library(neverhpfilter)
+```
+
+```{r}
+options(prompt="R> ", digits=3, scipen=999)
+```
+
+```{r}
+library(readxl)
+mydata <- read_excel("Output gap_quarterly.xlsx")
+mydata
+```
+
+```{r}
+library(tidyr)
+```
+
+```{r}
+mydata$GRDP = as.numeric(mydata$GRDP)
+```
+
+```{r}
+library(reshape2)
+```
+
+```{r}
+data_w <- dcast(mydata, Time ~ Province, value.var = "GRDP")
+```
+
+```{r}
+data_w
+```
+
+# define data frame as time series
+```{r}
+mydatats <- ts(data_w[,2:36], start =c(2010,1), frequency = 4)
+```
+
+```{r}
+mydatats
+```
+
+```{r}
+str(mydatats)
+```
+
+```{r}
+View(mydatats)
+```
+
+# log transform
+```{r}
+lngdp <- 100*log(mydatats)
+```
+
+```{r}
+View(lngdp)
+```
+
+# Plot Aceh GRDP (Level and log)
+```{r}
+par(mfrow=c(1,2))
+plot(mydatats[,1], xlab="", ylab="", main="Aceh GDP level")
+plot(lngdp[,1], xlab="", ylab="", main="Aceh GDP logs")
+par(mfrow=c(1,1))
+```
+
+
+```{r}
+library(dygraphs)
+```
+
+```{r}
+dygraph(lngdp[,1]) %>% 
+  dyRangeSelector()
+```
+# Apply HP Filter to series column 1 to 34 (Aceh to Yogyakarta) in loop
+
+
+# alternative 1: create time column manually
+```{r}
+year = rep(2010:2019, each =4)
+year
+quarter = rep(c("q1", "q2", "q3", "q4"), 10)
+quarter
+time <- paste(year, quarter, sep = "_")
+time
+```
+
+# Add rows Q1 and Q2 2020 
+```{r}
+hp <- data.frame(time)
+```
+
+```{r}
+hp <- rbind(hp, c("2020_q1")) %>% 
+  rbind(c("2020_q2"))
+hp 
+```
+
+# join time column to lngdp
+```{r}
+lngdp1 <- data.frame(hp, lngdp)
+```
+
+
+# alternative 2: extract time column from data_w
+```{r}
+hp1 <- data.frame(data_w$Time)
+hp1
+```
+
+#Extract time column from lngdp dataframe. We use it for joining actual, trendHP, cycleHP with hp  
+```{r}
+time1 <- data.frame(time=lngdp1[,1])
+time1
+```
+
+# hp filter for all provinces in loops
+```{r}
+for (i in 2:36) {
+  hpfil <- hpfilter(lngdp1[,i], freq = 1600)
+actual <- hpfil[["x"]]
+trendHP <- hpfil[["trend"]]
+cycleHP <- actual - trendHP
+
+colnames(actual) <- c(paste(colnames(lngdp1)[i],"actual",sep = "_"))
+colnames(trendHP) <- c(paste(colnames(lngdp1)[i],"trendHP",sep = "_"))
+colnames(cycleHP) <- c(paste(colnames(lngdp1)[i],"cycleHP",sep = "_"))
+
+actual_trend_cycle <- data.frame(actual, trendHP, cycleHP, time1)
+
+hp <- left_join(hp, actual_trend_cycle, by = "time")
+}
+```
+
+# check the computed hp filter results for all provinces combined
+```{r}
+View(hp)
+```
+
+#save the hp dataframe to csv
+```{r}
+write.table(hp, "outputgap.csv", sep = ";", col.names = NA,
+            qmethod = "double")
+```
+
+#extract only cycle column
+```{r}
+hpcycle <- select(hp, -contains("actual")) %>% 
+  select(-contains("trendHP"))
+```
+
+
+```{r}
+long_hp <- pivot_longer(hpcycle, -c(time), values_to = "output_gap", names_to = "province" )
+```
+
+```{r}
+long_hp <- long_hp %>% mutate(province = as.character(gsub("_cycleHP", "", province)))
+```
+
+```{r}
+graph <- long_hp %>% 
+  ggplot(aes(x = time, y = output_gap, color= province)) +
+geom_line(size=0.5) +
+labs(subtitle = "Output Gap, 2012-2019",
+x = "Time",
+y = "Output gap", color="") + theme_bw() +
+  theme(axis.line = element_line(colour = "black"),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank())
+graph
+```
+
+```{r}
+q2_2020hp <- filter(long_hp, time == "2020_q2")
+```
+
+
+```{r}
+outputgap <- ggplot(q2_2020hp, 
+       aes(x = reorder(province, -output_gap), 
+           y = output_gap, 
+           fill = ifelse(province == "Indonesia", "Highlighted", "red") )) + 
+  geom_bar(stat = "identity") + 
+   theme_minimal() +
+labs(subtitle = "",
+x = "",
+y = "Output gap in Q2-2020 (%)") +
+theme(text=element_text( family="Palatino")) +
+  ## drop legend and Y-axis title
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.position = "none", axis.title.y = element_blank()) +
+  coord_flip(expand = FALSE) ########## SMALL UPDATE
+outputgap
+ggsave("outputgap.png", width = 9, height = 5)
+```
+
