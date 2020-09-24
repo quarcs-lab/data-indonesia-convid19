@@ -71,7 +71,7 @@ options(prompt="R> ", digits=4, scipen=999)
 
 ```{r}
 library(readxl)
-data <- read_excel("explore expandr.xlsx", 
+data <- read_excel("explore_expandr.xlsx", 
     sheet = "Sheet1")
 View(data)
 ```
@@ -176,7 +176,7 @@ ggsave("job_loss.png", width = 9, height = 5)
 
 ```{r}
 df1 <- subset(data, select = c(2, 13, 15, 22, 23, 25))
-  colnames(df1) <- c("Province", "Case change", "Job loss", "People mobility", "TAS share in GDP", "GDPg Q2-2020")
+  colnames(df1) <- c("Province", "Case change", "Jobs lost", "People's mobility", "TAS share in GDP", "GDPg Q2-2020")
 ```
 
 
@@ -209,8 +209,8 @@ flattenCorrMatrix(res2$r, res2$P)
 ```{r}
 # Visualize correlation matrix
 library(corrplot)
-corrplot(res2$r, type="upper", order="hclust", 
+corrplot(res2$r, type="lower", order="hclust", tl.col="black", tl.srt=25,
          p.mat = res2$P, sig.level = 0.05, insig = "label_sig")
-dev.copy(jpeg,filename="corr.png");
-dev.off ();
+dev.copy(png,filename="corr.png", width = 800, height = 500);
+dev.off()
 ```
