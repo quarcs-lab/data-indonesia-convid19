@@ -17,3 +17,4 @@ THS_share_gdp;Share of Transportation & logistics, Hotels & Restaurants, Service
 gdp_q1_yoy;Real GDP growth in Q1-2020 (%, yoy);Statistics Indonesia;numeric
 gdp_q2_yoy;Real GDP growth in Q2-2020 (%, yoy);Statistics Indonesia;numeric
 gdp_q2_qtq;Real GDP growth in Q2-2020 (%, qtq);Statistics Indonesia;numeric
+output_gap;Output gap at Q2-2020 estimated using HP filter;Own calculation;numeric
