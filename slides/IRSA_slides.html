@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Regional Economic Growth Convergence and Spatial Growth Spillovers at Times of   COVID-19 Pandemic in Indonesia</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Harry Aginta, Ragdad C. Miranti, Carlos Mendez" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Regional Economic Growth Convergence and Spatial Growth Spillovers at Times of <br/> COVID-19 Pandemic in Indonesia
+### Harry Aginta, Ragdad C. Miranti, Carlos Mendez
+### Nagoya University <br/><br/><br/><br/> Presented at the 16th IRSA Conference <br/><br/> 12 July 2021
+
+---
+
+
+
+
+
+
+
+## Introduction:
+- COVID-19 leads to supply and demand shocks (Baldwin and Weder di Mauro 2020)
+    - Negative supply shock stemming from reduction in production capacity (Hausmann, 2020; Inoue and Todo, 2020)
+    - Declining workers' income leads to a shrinking in demand (Gourinchas, 2020)
+
+--
+--
+
+-  Indonesia's economic growth in 2020 is projected to contract to –3.8% (OECD, 2020)
+
+--
+--
+
+- Regionally, the negative impacts of COVID-19 on growth have been observed in Q2-2020, albeit vary in magnitude.
+
+--
+--
+  
+## Objectives:
+- To provide initial exploration on the connection between COVID-19, the policy and regional economic growth 
+
+--
+--
+
+- To study the difference of regional convergence and spatial spillovers between two periods; before and after pandemic
+
+
+---
+
+class: middle
+
+## Methods:
+- Exploratory data analysis
+
+--
+--
+
+- Spatial econometrics
+
+--
+--
+
+## Data:
+
+- Exploratory data analysis
+    - GDP (BPS), output gap (own computation), number of COVID-19 cases **([https://kawalCOVID19.id](https://kawalCOVID19.id))**, people's mobility **([Google mobility](https://www.google.com/covid19/mobility/))**, number of lost jobs (Ministry of Manpower)
+    - Period: Q2-2020
+    
+--
+--
+
+- Spatial econometrics
+    - Quarterly provincial real GDP
+    - GDP growth 2015:Q1-2019:Q4 (without pandemic period)
+    - GDP growth 2015:Q1-2020:Q2 (with pandemic period)
+
+---
+
+class: middle
+
+# (1) Exploratory data analysis
+
+- Negative output gap, economy below its potential level
+
+--
+--
+
+- Lowest economic growth in Q2-2020 mostly in Java-Bali region 
+
+--
+--
+
+- Negative correlation between people’s mobility and the change in number of COVID-19 cases and the share of TAS (Transportation, Accommodation and Services) in GDP
+
+--
+--
+
+- GDP growth is more connected to number of jobs loss and TAS share in GDP
+
+--
+--
+
+- The change in number of COVID-19 case is positively correlated with the share of TAS in GDP
+
+---
+class: middle, center
+
+**COVID-19 cases in Indonesian provinces (daily comulative, Apr-July 2020)**
+
+![](anim_covid.gif)
+
+---
+class: middle, center
+
+**Correlation between COVID-19 cases, economic growth, jobs lost, people's mobility and TAS share in GDP**
+
+![](corr.png)
+
+Further interactive exploration is available. &lt;br/&gt; **[https://haginta.shinyapps.io/covid19-econ-impacts-indonesia/](https://haginta.shinyapps.io/covid19-econ-impacts-indonesia/)**
+
+
+---
+
+class: center, middle
+
+# (2) Convergence and spatial spillovers
+
+Classical convergence (intuition)
+
+Spatial dependence (intuition)
+
+
+---
+class: middle
+
+# Beta convergence framework (brief overview)
+
+`$$\begin{equation}\ln \left(\frac{\gamma_{i, t+k}}{y_{i, t}}\right)=\alpha+\beta \ln \left(\gamma_{i, t}\right)+\varepsilon_{i t}\end{equation}$$`
+The convergence hypothesis: negative and significant `\(\beta\)`, implying catching-up process or `\(\beta\)` convergence (Rey and Montouri, 1999)
+
+---
+class: middle
+
+# Spatial dependence (brief overview)
+
+- Global spatial autocorrelation or Moran's I (Anselin, 2007)
+
+`$$I=\sum_{i} \sum_{j} w_{i j} \cdot\left(x_{i}-\mu\right) \cdot\left(x_{j}-\mu\right) / \sum_{i}\left(x_{i}-\mu\right)^{2}$$`
+where `\(w_{ij}\)` is spatial weight matrix (we use inverse distance), `\(x_{i}\)` is the score of the variable in location `\(i\)`, and `\(x_{j}\)` is the score of the variable in location `\(j\)`, and `\(\mu\)` is he cross-sectional mean of the variable. 
+
+- Spatial econometric model
+
+Spatial lag model (SLM)
+`$$g_{y_{i}}=\gamma+\beta \log y_{i, 0}+\rho \mathbf{W} g_{y_{i}}+\varepsilon_{i}$$`
+Spatial error model (SEM)
+`$$g_{y_{i}}=\gamma+\beta \log y_{i, 0}+(\mathbf{I}-\lambda \mathbf{W})^{-1} \varepsilon_{i}$$`
+where `\(g_{y_{i}}\)` is the growth rate from initial to final period, `\(y_{i, 0}\)` is GDP at the initial period, and `\(\mathbf{W}\)` is spatial weight matrix.
+
+---
+class: middle
+
+# Spatial lag model and spatial error model (conceptual comparison)
+
+![](sla_sem1.png)
+Source: 
+Baller, R., L.Anselin, S.Messner, G.Deane and D.Hawkins (2001)
+
+---
+class: middle, center
+
+# (3) Main results
+
+
+**Spatial dependence of provincial economic growth** 
+
+Without vs with pandemic period: spatial cluster vs spatial heterogeneity
+
+![](table1.png)
+
+---
+class: middle, center
+
+# (3) Main results (cont...)
+
+**Cpmparison between non-spatial and spatial models** 
+
+![](table2.png)
+
+
+---
+class: middle
+
+## Discussion
+
+- In all models and all periods, there is `\(\beta\)` convergence  
+
+--
+--
+
+- Both for SLA and SEM, the spatial coefficients are positive (significant) in without pandemic and negative (significant) with pandemic period
+
+--
+--
+
+- The positive spatial coefficients imply positive spillovers from neighboring provinces (McCulloch and Sjahrir, 2008)
+
+--
+--
+
+- Negative spatial coefficients indicates weakening growth spillovers effect when the pandemic period is included in the observation, resulting in an unsynchronized spatial growth. This may reflect the disconnection of economic interaction among people across provinces during ‘lock-down period’ due to pandemic.
+
+---
+
+class: middle
+
+# Conclusion and implications
+- The negative impact of COVID-19 pandemic on Indonesian economy is significant, massive decline of economic growth in Q2-2020. 
+
+--
+--
+
+- Regionally, there is positive (negative) growth spillovers before (after) pandemic
+
+--
+--
+
+- The negative spatial spillover due to the inclusion of pandemic period may reflect the disconnection of economic interaction among provinces during ‘the lock-down period’
+
+--
+--
+
+- Short-term: identify the resilient economic sectors in their respective province, stimulus to sustain local economy, cushion for the most vulnerable
+
+--
+--
+
+- Long-term: diversify the sources of economic growth across provinces, including by bringing the digital economy closer to the society
+
+## Limitation
+
+- Need to consider other weight matrix 
+- Data used in the models are very limited to explain the complex regional growth dynamics
+- Future studies: incorporate more variables, including the institutional determinants of growth
+
+---
+
+class: center, middle
+
+# Thank you very much for your attention
+
+**https://haginta.github.io/Harry-Aginta/**
+
+Slides and working paper available at: http://bit.ly/jasid2019n 
+
+
+**Quantitative Regional and Computational Science lab**
+
+**https://quarcs-lab.org/** &lt;br/&gt;
+&lt;img src="QuaRCS_logo.png" width="200"&gt;
+
+
+***
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
